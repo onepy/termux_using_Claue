@@ -143,6 +143,7 @@ source /root/.bashrc
 	cd clewd
         bash start.sh
 	cd /root
+        ;;
     *)
 	    echo -e "m9( ｀д´ )!!!! \n\033[0;36m坏猫猫居然不听话，存心和我hoping喵~过不去是吧？\033[0m"
 	;;
