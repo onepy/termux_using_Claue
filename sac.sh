@@ -40,10 +40,11 @@ if [ ! -d "clewd" ]; then
 	git clone https://github.com/teralomaniac/clewd
 	cd clewd
 	bash start.sh
+        cd /root
 elif [ ! -f "clewd/config.js" ]; then
     cd clewd
     bash start.sh
-    cd root
+    cd /root
 fi
 
 clewd_dir=clewd
