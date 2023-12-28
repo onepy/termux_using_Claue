@@ -70,7 +70,7 @@ read -p "是否修改密码?(y/n)" choice
 
 if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
   # 读取用户输入的新密码
-  read -p "请输入新密码/n（不是你本地部署设密码干哈啊？）:" new_pass
+  read -p "请输入新密码\n（不是你本地部署设密码干哈啊？）:" new_pass
 
   # 修改密码
   sed -i 's/"ProxyPassword": ".*",/"ProxyPassword": "'$new_pass'",/g' $clewd_dir/config.js
