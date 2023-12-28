@@ -95,8 +95,7 @@ else
   echo "未修改端口号"
 fi
 
-echo "hoping：请输入你的cookie文本喵~(回车进行保存，如果全部输>
-入完后按一次ctrl+D即可退出输入):"
+echo "hoping：请输入你的cookie文本喵~(回车进行保存，如果全部输入完后按一次ctrl+D即可退出输入):"
 while IFS= read -r line; do
   cookies=$(echo "$line" | grep -E -o '"?sessionKey=[^"]{100,120}AA"?' | tr -d "\"'")
   if [ -n "$cookies" ]; then
@@ -113,8 +112,7 @@ while IFS= read -r line; do
 
     echo "Cookies成功被添加到config.js文件了喵~"
         else
-                echo "没有找到cookie喵~o(╥﹏╥)o，要不检查一下co
-okie是不是输错了吧？(如果要退出输入请按Ctrl+D)"
+                echo "没有找到cookie喵~o(╥﹏╥)o，要不检查一下cookie是不是输错了吧？(如果要退出输入请按Ctrl+D)"
   fi
 done
 
