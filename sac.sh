@@ -48,7 +48,7 @@ elif [ ! -f "clewd/config.js" ]; then
 fi
 
 clewd_dir=clewd
-echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 修改clewd配置\n\033[0m\033[0;37m选项4 修改酒馆配置\n\033[0m\033[0;33m选项5 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
+echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 修改clewd配置\n\033[0m\033[0;37m选项4 修改酒馆配置\n\033[0m\033[0;33m选项5 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;37m选项6 保留数据更新酒馆最新版本\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
 read option
 
 # 执行相应的操作
@@ -141,6 +141,54 @@ source /root/.bashrc
 	cd clewd
         bash start.sh
 	cd /root
+        ;;
+    6)
+    if [ -d "SillyTavern_old" ]; then                                   
+    NEW_FOLDER_NAME="SillyTavern_$(date +%Y%m%d)"
+    mv SillyTavern_old $NEW_FOLDER_NAME
+    fi                                                                
+git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
+cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
+cp -r SillyTavern/public/chats/. SillyTavern_new/public/chats/       
+cp -r SillyTavern/public/worlds/. SillyTavern_new/public/worlds/
+cp -r SillyTavern/public/groups/. SillyTavern_new/public/groups/
+cp -r SillyTavern/public/group\ chats/. SillyTavern_new/public/group\ chats/
+cp -r SillyTavern/public/OpenAI\ Settings/. SillyTavern_new/public/OpenAI\ Settings/
+cp -r SillyTavern/public/User\ Avatars/. SillyTavern_new/public/User\ Avatars/
+cp -r SillyTavern/public/backgrounds/. SillyTavern_new/public/backgrounds/
+mv SillyTavern SillyTavern_old                                    
+mv SillyTavern_new SillyTavern
+
+read -p "是否删除旧版本,请输入Y/N:" para
+case $para in
+        [yY])
+                read -p "若要删除请再次确认" queren
+
+                case $queren in
+                        [yY])
+                                rm -rf SillyTavern_old
+				echo "hoping:酒馆更新成功了喵~"
+                                ;;
+                        [nN])
+                                echo "保留旧版本"
+				echo "hoping:酒馆更新结束了喵~"
+                                ;;
+                        *)
+                                echo "错误的输入"
+                                read -p "已经默认保留旧版本"
+                                echo "hoping:酒馆更新结束了喵~"
+                                ;;
+                esac
+                ;;
+        [nN])
+                echo "保留旧版本"
+		echo "hoping:酒馆更新结束了喵~"
+                ;;
+        *)
+                echo "错误的输入"
+                read -p "已经默认保留旧版本"
+                echo "hoping:酒馆更新结束了喵~"
+esac
         ;;
     *)
 	    echo -e "m9( ｀д´ )!!!! \n\033[0;36m坏猫猫居然不听话，存心和我hoping喵~过不去是吧？\033[0m"
