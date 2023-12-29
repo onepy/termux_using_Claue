@@ -148,6 +148,12 @@ source /root/.bashrc
     mv SillyTavern_old $NEW_FOLDER_NAME
     fi                                                                
 git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
+
+    if [ ! -d "SillyTavern_new" ]; then
+    echo -e "˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
+    exit 3
+    fi
+    
 cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
 cp -r SillyTavern/public/chats/. SillyTavern_new/public/chats/       
 cp -r SillyTavern/public/worlds/. SillyTavern_new/public/worlds/
