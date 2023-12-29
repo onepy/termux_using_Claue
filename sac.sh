@@ -150,7 +150,7 @@ source /root/.bashrc
 git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
 
     if [ ! -d "SillyTavern_new" ]; then
-    echo -e "˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
+    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
     exit 3
     fi
     
