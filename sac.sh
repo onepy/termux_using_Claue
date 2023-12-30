@@ -73,62 +73,63 @@ case $option in
         ;;
     3)
 		echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m选项1 修改clewd密码\n\033[0m\033[0;37m选项2 修改clewd端口\n\033[0m\033[0;33m选项3 为clewd添加cookies\n\033[0m"
+  		read option_3
 		case $option_3 in
 		1)
-        # 询问用户是否修改密码
-read -p "是否修改密码?(y/n)" choice
+  		# 询问用户是否修改密码
+		read -p "是否修改密码?(y/n)" choice
 
-if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
-  # 读取用户输入的新密码
-  read -p "请输入新密码\n（不是你本地部署设密码干哈啊？）:" new_pass
+		if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
+  		# 读取用户输入的新密码
+ 		 read -p "请输入新密码\n（不是你本地部署设密码干哈啊？）:" new_pass
 
-  # 修改密码
-  sed -i 's/"ProxyPassword": ".*",/"ProxyPassword": "'$new_pass'",/g' $clewd_dir/config.js
+		  # 修改密码
+		  sed -i 's/"ProxyPassword": ".*",/"ProxyPassword": "'$new_pass'",/g' $clewd_dir/config.js
 
-  echo "密码已修改为$new_pass"
-else
-  echo "未修改密码"
-fi
+ 		 echo "密码已修改为$new_pass"
+		else
+		  echo "未修改密码"
+		fi
 		;;
 		2)
-# 提示是否修改端口
-read -p "是否要修改开放端口?(y/n)" choice
+		# 提示是否修改端口
+		read -p "是否要修改开放端口?(y/n)" choice
 
-if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
-   # 读取用户输入的端口号
-   read -p "请输入开放的端口号:" custom_port
+		if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
+  		 # 读取用户输入的端口号
+  		 read -p "请输入开放的端口号:" custom_port
 
-    # 更新配置文件的端口号
-   sed -i 's/"Port": [0-9]*/"Port": '$custom_port'/g' $clewd_dir/config.js
+  		  # 更新配置文件的端口号
+ 		  sed -i 's/"Port": [0-9]*/"Port": '$custom_port'/g' $clewd_dir/config.js
 
-   echo "端口已修改为$custom_port"
-else
-  echo "未修改端口号"
-fi
+ 		  echo "端口已修改为$custom_port"
+		else
+ 		 echo "未修改端口号"
+		fi
 		;;
 		3)
-echo "hoping：请输入你的cookie文本喵~(回车进行保存，如果全部输入完后按一次ctrl+D即可退出输入):"
-while IFS= read -r line; do
-  cookies=$(echo "$line" | grep -E -o '"?sessionKey=[^"]{100,120}AA"?' | tr -d "\"'")
-  if [ -n "$cookies" ]; then
-    echo "我猜你的cookies是:\n"
-    echo "$cookies"
+		echo "hoping：请输入你的cookie文本喵~(回车进行保存，如果全部输入完后按一次ctrl+D即可退出输入):"
+		while IFS= read -r line; do
+		  cookies=$(echo "$line" | grep -E -o '"?sessionKey=[^"]{100,120}AA"?' | tr -d "\"'")
+		  if [ -n "$cookies" ]; then
+		    echo "我猜你的cookies是:\n"
+		    echo "$cookies"
 
-    # Format cookies, one per line with quotes
-    cookies=$(echo "$cookies" | tr ' ' '\n' | sed -e 's/^/"/; s/$/"/g')
+		    # Format cookies, one per line with quotes
+		    cookies=$(echo "$cookies" | tr ' ' '\n' | sed -e 's/^/"/; s/$/"/g')
 
-    # Join into array
-    cookie_array=$(echo "$cookies" | tr '\n' ',' | sed 's/,$//')
-                                                                   # Update config.js
-    sed -i "/\"CookieArray\"/s/\[/\[$cookie_array\,/" ./$clewd_dir/config.js
+		    # Join into array
+		    cookie_array=$(echo "$cookies" | tr '\n' ',' | sed 's/,$//')
+                    # Update config.js
+		    sed -i "/\"CookieArray\"/s/\[/\[$cookie_array\,/" ./$clewd_dir/config.js
 
-    echo "Cookies成功被添加到config.js文件了喵~"
-        else
-                echo "没有找到cookie喵~o(╥﹏╥)o，要不检查一下cookie是不是输错了吧？(如果要退出输入请按Ctrl+D)"
-  fi
-done
+		    echo "Cookies成功被添加到config.js文件了喵~"
+ 		       else
+		                echo "没有找到cookie喵~o(╥﹏╥)o，要不检查一下cookie是不是输错了吧？(如果要退出输入请按Ctrl+D)"
+		  fi
+		done
 
-echo "cookies成功输入了，(*^▽^*)"
+		echo "cookies成功输入了，(*^▽^*)"
 		;;
 		*)
 		echo "什么都没有执行喵~"
