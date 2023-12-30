@@ -72,7 +72,7 @@ case $option in
 	bash start.sh
         ;;
     3)
-		echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m选项1 修改clewd密码\n\033[0m\033[0;37m选项2 修改clewd端口\n\033[0m\033[0;33m选项3 为clewd添加cookies\n\033[0m"
+		echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改clewd密码\n\033[0m\033[0;37m选项2 修改clewd端口\n\033[0m\033[0;33m选项3 为clewd添加cookies\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
   		read option_3
 		case $option_3 in
 		1)
