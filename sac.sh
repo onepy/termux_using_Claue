@@ -30,8 +30,10 @@ else
   fi
 fi
 
-if [ ! -d "SillyTavern" ]; then
+if [ ! -d "SillyTavern" ] || [ ! -d "SillyTavern/start.sh" ]; then
     echo "SillyTavern不存在，正在通过git下载..."
+	cp -r SillyTavern/public SillyTavern_public_bak
+	rm -rf SillyTavern
     git clone https://github.com/SillyTavern/SillyTavern SillyTavern
 fi
 
@@ -47,6 +49,11 @@ elif [ ! -f "clewd/config.js" ]; then
     cd /root
 fi
 
+if [ ! -d "SillyTavern" ] || [ ! -d "SillyTavern/start.sh" ] || [ ! -d "clewd" ] || [ ! -f "clewd/config.js" ]; then
+	echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
+	exit 2
+fi
+
 clewd_dir=clewd
 echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 修改clewd配置\n\033[0m\033[0;37m选项4 修改酒馆配置\n\033[0m\033[0;33m选项5 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;37m选项6 保留数据更新酒馆最新版本\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
 read option
@@ -54,7 +61,7 @@ read option
 # 执行相应的操作
 case $option in
     0)
-        exit 2
+        exit 3
 	;;
     1)
         cd clewd
@@ -65,6 +72,9 @@ case $option in
 	bash start.sh
         ;;
     3)
+		echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m选项1 修改clewd密码\n\033[0m\033[0;37m选项2 修改clewd端口\n\033[0m\033[0;33m选项3 为clewd添加cookies\n\033[0m"
+		case $option_3 in
+		1)
         # 询问用户是否修改密码
 read -p "是否修改密码?(y/n)" choice
 
@@ -79,7 +89,8 @@ if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
 else
   echo "未修改密码"
 fi
-
+		;;
+		2)
 # 提示是否修改端口
 read -p "是否要修改开放端口?(y/n)" choice
 
@@ -94,7 +105,8 @@ if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
 else
   echo "未修改端口号"
 fi
-
+		;;
+		3)
 echo "hoping：请输入你的cookie文本喵~(回车进行保存，如果全部输入完后按一次ctrl+D即可退出输入):"
 while IFS= read -r line; do
   cookies=$(echo "$line" | grep -E -o '"?sessionKey=[^"]{100,120}AA"?' | tr -d "\"'")
@@ -117,7 +129,11 @@ while IFS= read -r line; do
 done
 
 echo "cookies成功输入了，(*^▽^*)"
-source /root/.bashrc
+		;;
+		*)
+		echo "什么都没有执行喵~"
+		;;
+	esac
         ;;
     4)
         read -p "是否要修改开放端口?(y/n)" choice
@@ -151,7 +167,7 @@ git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
 
     if [ ! -d "SillyTavern_new" ]; then
     echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
-    exit 3
+    exit 4
     fi
     
 cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
@@ -194,6 +210,7 @@ case $para in
                 echo "错误的输入"
                 read -p "已经默认保留旧版本"
                 echo "hoping:酒馆更新结束了喵~"
+				;;
 esac
         ;;
     *)
