@@ -58,7 +58,7 @@ fi
 if  [ ! -d "clewd" ] || [ ! -f "clewd/config.js" ]; then
 	echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
   	rm -rf clewd
-	exit 2
+	exit 3
 fi
 
 clewd_dir=clewd
@@ -72,7 +72,7 @@ case $option in
        curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
         ;;
     0)
-        exit 3
+        exit 4
 	;;
     1)
         cd clewd
@@ -179,7 +179,7 @@ git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
 
     if [ ! -d "SillyTavern_new" ]; then
     echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
-    exit 4
+    exit 5
     fi
     
 cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
