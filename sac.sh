@@ -63,6 +63,7 @@ case $option in
    00)
        rm -rf sac.sh
        curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
+        ;;
     0)
         exit 3
 	;;
