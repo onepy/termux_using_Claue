@@ -49,9 +49,14 @@ elif [ ! -f "clewd/config.js" ]; then
     cd /root
 fi
 
-if [ ! -d "SillyTavern" ] || [ ! -f "SillyTavern/start.sh" ] || [ ! -d "clewd" ] || [ ! -f "clewd/config.js" ]; then
+if [ ! -d "SillyTavern" ] || [ ! -f "SillyTavern/start.sh" ]; then
 	echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
  	rm -rf SillyTavern
+	exit 2
+fi
+
+if  [ ! -d "clewd" ] || [ ! -f "clewd/config.js" ]; then
+	echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
   	rm -rf clewd
 	exit 2
 fi
