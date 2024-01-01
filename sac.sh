@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.5"
+version="Ver2.5.1"
 # hopingmiao=hotmiao
 # 
 
@@ -85,7 +85,7 @@ function clewdSettings {
                 cookies=$(echo "$line" | grep -E -o '"?sessionKey=[^"]{100,120}AA"?' | tr -d "\"'")
                 echo "$cookies"
                 if [ -n "$cookies" ]; then
-                    echo -p "我猜你的cookies是:\n"
+                    echo -e "我猜你的cookies是:\n"
                     echo "$cookies"
                     # Format cookies, one per line with quotes
                     cookies=$(echo "$cookies" | tr ' ' '\n' | sed -e 's/^/"/; s/$/"/g')
