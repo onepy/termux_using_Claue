@@ -1,14 +1,22 @@
 #!/bin/bash
 
+echo "                                              
+喵喵一键安卓脚本
+作者: hoping喵，坏水秋
+来自: Claude2.1先行破限组
+群号: 704819371 / 910524479 / 304690608
+类脑Discord: https://discord.gg/HWNkueX34q
+"
+
 echo -e "\033[0;31m开魔法！开魔法！开魔法！\033[0m\n"
 
 read -p "确保开了魔法后按回车继续"
 
 current=/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
 
-apt update
+yes | apt update
 
-apt upgrade
+yes | apt upgrade
 
 # 安装proot-distro
 pkg install proot-distro -y
