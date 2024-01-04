@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.5.3"
+version="Ver2.5.2"
 # hopingmiao=hotmiao
 # 
 
@@ -41,7 +41,7 @@ fi
 
 if [ ! -d "clewd" ]; then
 	echo "clewd不存在，正在通过git下载..."
-	git clone -b test https://github.com/teralomaniac/clewd.git
+	git clone https://github.com/teralomaniac/clewd
 	cd clewd
 	bash start.sh
         cd /root
