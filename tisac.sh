@@ -49,7 +49,7 @@ fi
 
 git clone https://github.com/SillyTavern/SillyTavern
 
-git clone -b test https://github.com/teralomaniac/clewd.git
+git clone https://github.com/teralomaniac/clewd
 
 curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
 
