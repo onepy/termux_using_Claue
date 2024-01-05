@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.5.2"
+version="Ver2.5.3"
 # hopingmiao=hotmiao
 # 
 
