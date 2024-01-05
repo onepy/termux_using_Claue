@@ -36,6 +36,8 @@ echo "正在安装相应软件喵~"
 
 pkg install git vim curl xz-utils -y
 
+cp -r SillyTavern $current/root/
+
 cd $current/root
 
 echo "正在为Ubuntu安装node喵~"
