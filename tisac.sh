@@ -36,7 +36,9 @@ echo "正在安装相应软件喵~"
 
 pkg install git vim curl xz-utils -y
 
-cp -r SillyTavern $current/root/
+if [ -d "SillyTavern" ]; then
+  cp -r SillyTavern $current/root/
+fi
 
 cd $current/root
 
@@ -49,7 +51,9 @@ tar xf node-v20.10.0-linux-arm64.tar.xz
 echo "export PATH=\$PATH:/root/node-v20.10.0-linux-arm64/bin" >>$current/etc/profile
 fi
 
+if [ ! -d "SillyTavern" ]; then
 git clone https://github.com/SillyTavern/SillyTavern
+fi
 
 git clone https://github.com/teralomaniac/clewd
 
