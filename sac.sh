@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.5.3"
+version="Ver2.5.4"
 # hopingmiao=hotmiao
 # 
 
@@ -138,7 +138,7 @@ function clewdSettings {
                 read -p "请输入需要设置的数值:" cookiecounter
 
                 # 更新配置文件的Cookiecounter
-                sed -i 's/"Cookiecounter": [0-9]*/"Cookiecounter": '$cookiecounter'/g' $clewd_dir/config.js
+                sed -i 's/"Cookiecounter": .*,/"Cookiecounter": '$cookiecounter',/g' $clewd_dir/config.js
                 echo "Cookiecounter已修改为$cookiecounter"
             else
                 echo "未修改Cookiecounter"
