@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.5.4"
+version="Ver2.6.0"
 # hopingmiao=hotmiao
 # 
 
@@ -188,6 +188,10 @@ function sillyTavernSettings {
     echo
     case $option in 
         1)
+	if [ ! -f "SillyTavern/config.yaml"]; then
+            echo -e "当前酒馆版本过低，请更新酒馆版本后重试"
+            exit
+        fi
             read -p "是否要修改开放端口?(y/n)" choice
 
             if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
