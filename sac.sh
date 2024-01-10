@@ -1,6 +1,7 @@
 #!/bin/bash
 
-version="Ver2.7.1"
+version="Ver2.7.2"
+latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
 #
 
@@ -278,10 +279,11 @@ function sillyTavernSettings {
 }
 
 # 主菜单
-echo "                                              
+echo -e "                                              
 喵喵一键脚本
 作者：hoping喵(懒喵~)，水秋喵(苦等hoping喵起床)
 版本：$version
+最新：\033[0;33m$latest_version\033[0m
 来自：Claude2.1先行破限组
 群号：704819371，910524479，304690608
 类脑Discord(角色卡发布等): https://discord.gg/HWNkueX34q
