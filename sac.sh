@@ -1,8 +1,12 @@
 #!/bin/bash
 
-version="Ver2.6.1"
+version="Ver2.6.2"
 # hopingmiao=hotmiao
 # 
+
+apt update
+
+apt install curl xz-utils
 
 # 检查是否存在git指令
 if command -v git &> /dev/null; then
