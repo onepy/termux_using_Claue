@@ -1,12 +1,8 @@
 #!/bin/bash
 
-version="Ver2.6.3"
+version="Ver2.7.0"
 # hopingmiao=hotmiao
-# 
-
-apt update
-
-apt install curl xz-utils
+#
 
 # 检查是否存在git指令
 if command -v git &> /dev/null; then
@@ -41,6 +37,16 @@ if [ ! -d "SillyTavern" ] || [ ! -f "SillyTavern/start.sh" ]; then
 	cp -r SillyTavern/public SillyTavern_public_bak
 	rm -rf SillyTavern
     git clone https://github.com/SillyTavern/SillyTavern SillyTavern
+    echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
+    read -p "回车进行导入破限喵~"
+    rm -rf /root/st_promot
+    git clone https://github.com/hopingmiao/promot.git /root/st_promot
+    if  [ ! -d "/root/st_promot" ]; then
+        echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动预设文件下载失败了，更换网络后再试喵~\n\033[0m"
+    else
+    cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
+    echo -e "\033[0;33m破限已成功导入，安装完毕后启动酒馆即可看到喵~\033[0m"
+    fi
 fi
 
 if [ ! -d "clewd" ]; then
@@ -187,7 +193,7 @@ function clewdSettings {
 
 function sillyTavernSettings {
     # 4. SillyTavern设置
-	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 保留数据更新酒馆最新版本\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 保留数据更新酒馆最新版本\n\033[0m\033[0;33m选项3 导入最新整合预设\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -251,6 +257,19 @@ function sillyTavernSettings {
                             ;;
                     esac
             esac
+            ;;
+        3)
+            #导入破限
+            echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
+            read -p "回车进行导入破限喵~"
+            rm -rf /root/st_promot
+            git clone https://github.com/hopingmiao/promot.git /root/st_promot
+            if  [ ! -d "/root/st_promot" ]; then
+            echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
+            exit 6
+            fi
+            cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
+            echo -e "\033[0;33m破限已成功导入，启动酒馆看看喵~\033[0m"
             ;;
         *)
             echo "什么都没有执行喵~"
