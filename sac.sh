@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.7.2"
+version="Ver2.7.3"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
 #
@@ -194,7 +194,7 @@ function clewdSettings {
 
 function sillyTavernSettings {
     # 4. SillyTavern设置
-	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 保留数据更新酒馆最新版本\n\033[0m\033[0;33m选项3 导入最新整合预设\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 保留数据更新酒馆最新版本\n\033[0m\033[0;33m选项3 导入最新整合预设\n\033[0m\033[0;37m选项4 导入DC总结插件by(Darker than Black)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -271,6 +271,21 @@ function sillyTavernSettings {
             fi
             cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
             echo -e "\033[0;33m破限已成功导入，启动酒馆看看喵~\033[0m"
+            ;;
+        4)
+            #DC总结插件by(Darker than Black)
+            echo -e "\033[0;33m插件作者为Darker than Black,发布于DC类脑频道\033[0m"
+            read -p "回车进行导入插件喵~"
+            cd /root/SillyTavern/public/QuickReplies
+            curl -O https://cdn.discordapp.com/attachments/1190219779458486292/1190219779856932864/f96ce3edc4220761.json?ex=65bcb10c&is=65aa3c0c&hm=15ede2b950edc8038397bed82ef5d99644226442fc55c904be0f3b47c4fad6bb&
+            echo -e "\033[0;33m等待\n等待\n等待下载结束后回车检测插件是否下载成功喵~\033[0m"
+            read -p " "
+            if [ -f "f96ce3edc4220761.json" ]; then
+                echo -e "\033[0;33m总结插件(by Darker than Black)导入成功\n\033[0m"
+            else
+                echo -e "\033[0;31m总结插件(by Darker than Black)导入失败！\n\033[0m"
+            fi
+            cd /root
             ;;
         *)
             echo "什么都没有执行喵~"
