@@ -274,7 +274,8 @@ function sillyTavernSettings {
             ;;
         4)
             #DC总结插件by(Darker than Black)
-            echo -e "\033[0;33m插件作者为Darker than Black,发布于DC类脑频道\033[0m"
+            echo -e "\033[0;33m插件作者为Darker than Black,发布于DC类脑频道\n具体地址为:\n\033[0m"
+            echo "https://discord.com/channels/1134557553011998840/1190219779458486292"
             read -p "回车进行导入插件喵~"
             cd /root/SillyTavern/public/QuickReplies
             curl -O https://cdn.discordapp.com/attachments/1190219779458486292/1190219779856932864/f96ce3edc4220761.json?ex=65bcb10c&is=65aa3c0c&hm=15ede2b950edc8038397bed82ef5d99644226442fc55c904be0f3b47c4fad6bb&
