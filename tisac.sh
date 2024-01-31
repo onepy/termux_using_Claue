@@ -74,6 +74,8 @@ if [ ! -f "$current/root/sac.sh" ]; then
    exit
 fi
 
+ln -s /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu/root
+
 echo "bash /root/sac.sh" >>$current/root/.bashrc
 
 echo "proot-distro login ubuntu" >>/data/data/com.termux/files/home/.bashrc
