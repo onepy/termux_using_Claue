@@ -209,9 +209,10 @@ function clewdSettings {
             fi
             ;;
         0)
-			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
-            read -n 1 -p "" clewdup_choice
-			cd /root
+		echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
+            	read -n 1 -p "" clewdup_choice
+			echo
+   			cd /root
 			case $clewdup_choice in
 				1)
 					cd /root/clewd
@@ -265,7 +266,8 @@ function sillyTavernSettings {
         2)
 			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
             read -n 1 -p "" stup_choice
-			cd /root
+			echo
+   			cd /root
 			case $stup_choice in
 				1)
 					cd /root/SillyTavern
