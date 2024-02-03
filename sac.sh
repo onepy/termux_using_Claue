@@ -1,6 +1,7 @@
 #!/bin/bash
 
-version="Ver2.7.3"
+version="Ver2.7.4"
+echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
 #
@@ -32,6 +33,13 @@ else
 
   fi
 fi
+
+#添加termux上的Ubuntu/root软链接
+if [ ! -d "/data/data/com.termux/files/home/root" ]; then
+    ln -s /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu/root /data/data/com.termux/files/home
+fi
+
+echo "root软链接已添加，可直接在mt管理器打开root文件夹修改文件"
 
 if [ ! -d "SillyTavern" ] || [ ! -f "SillyTavern/start.sh" ]; then
     echo "SillyTavern不存在，正在通过git下载..."
@@ -77,7 +85,7 @@ fi
 function clewdSettings { 
     # 3. Clewd设置
     clewd_dir=clewd
-    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项0 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -177,7 +185,29 @@ function clewdSettings {
                     echo "不修改喵~"
                     break ;; 
             esac
-            ;;    
+            ;;
+        8)
+            PreventImperson_value=$(grep -oP '"PreventImperson": \K[^,]*' clewd/config.js)
+            echo -e "当前PreventImperson值为\033[0;33m $PreventImperson_value \033[0m喵~"
+            read -p "是否进行更改[y/n]" PreventImperson_choice
+            if [ $PreventImperson_choice == "Y" ] || [ $PreventImperson_choice == "y" ]; then
+                if [ $PreventImperson_value == 'false' ];
+    then
+                    #将false替换为true
+                    sed -i 's/"PreventImperson": false,/"PreventImperson": true,/g' $clewd_dir/config.js
+                    echo -e "hoping：'PreventImperson'已经被修改成\033[0;33m true \033[0m喵~."
+                elif [ $PreventImperson_value == 'true' ];
+    then
+                    #将true替换为false
+                    sed -i 's/"PreventImperson": true,/"PreventImperson": false,/g' $clewd_dir/config.js
+                    echo -e "hoping：'PreventImperson'值已经被修改成\033[0;33m false \033[0m喵~."
+                else
+                    echo -e "呜呜X﹏X\nhoping喵未能找到'PreventImperson'."
+                fi
+            else
+                echo "未进行修改喵~"
+            fi
+            ;;
         0)
             cd /root
 	        rm -rf clewd
