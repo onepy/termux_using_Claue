@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.7.4"
+version="Ver2.7.5"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
@@ -85,7 +85,7 @@ fi
 function clewdSettings { 
     # 3. Clewd设置
     clewd_dir=clewd
-    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 删除现有clewd，下载最新测试修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 保留config.js下载test分支最新修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -210,11 +210,17 @@ function clewdSettings {
             ;;
         0)
             cd /root
-	        rm -rf clewd
-            git clone -b test https://github.com/teralomaniac/clewd.git
-	        cd clewd
-            bash start.sh
-	        cd /root
+            git clone -b test https://github.com/teralomaniac/clewd.git /root/clewd_new
+            if [ ! -d "clewd_new" ]; then
+                echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
+                exit 5
+            fi
+	        cp -r clewd/config.js clewd_new/config.js
+            if [ -f "clewd_new/config.js" ]; then
+                echo "config.js配置文件已转移，正在删除旧版clewd"
+                rm -rf /root/clewd
+                mv clewd_new clewd
+            fi
             ;;
         *)
             echo "什么都没有执行喵~"
