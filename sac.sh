@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.7.5"
+version="Ver2.7.6"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
@@ -209,18 +209,29 @@ function clewdSettings {
             fi
             ;;
         0)
-            cd /root
-            git clone -b test https://github.com/teralomaniac/clewd.git /root/clewd_new
-            if [ ! -d "clewd_new" ]; then
-                echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
-                exit 5
-            fi
-	        cp -r clewd/config.js clewd_new/config.js
-            if [ -f "clewd_new/config.js" ]; then
-                echo "config.js配置文件已转移，正在删除旧版clewd"
-                rm -rf /root/clewd
-                mv clewd_new clewd
-            fi
+			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
+            read -p "" clewdup_choice
+			cd /root
+			case $clewdup_choice in
+				1)
+					cd /root/clewd
+					git checkout -b test origin/test
+					git pull
+					;;
+				2)
+					git clone -b test https://github.com/teralomaniac/clewd.git /root/clewd_new
+					if [ ! -d "clewd_new" ]; then
+						echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
+						exit 5
+					fi
+					cp -r clewd/config.js clewd_new/config.js
+					if [ -f "clewd_new/config.js" ]; then
+						echo "config.js配置文件已转移，正在删除旧版clewd"
+						rm -rf /root/clewd
+						mv clewd_new clewd
+					fi
+					;;
+			esac
             ;;
         *)
             echo "什么都没有执行喵~"
@@ -252,48 +263,63 @@ function sillyTavernSettings {
             fi
             ;;
         2)
-            if [ -d "SillyTavern_old" ]; then                                   
-                NEW_FOLDER_NAME="SillyTavern_$(date +%Y%m%d)"
-                mv SillyTavern_old $NEW_FOLDER_NAME
-            fi                                                                
-            git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
+			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
+            read -p "" stup_choice
+			cd /root
+			case $stup_choice in
+				1)
+					cd /root/SillyTavern
+					git pull
+					;;
+				2)
+					if [ -d "SillyTavern_old" ]; then                                   
+						NEW_FOLDER_NAME="SillyTavern_$(date +%Y%m%d)"
+						mv SillyTavern_old $NEW_FOLDER_NAME
+					fi                                                                
+					git clone https://github.com/SillyTavern/SillyTavern.git SillyTavern_new
 
-            if [ ! -d "SillyTavern_new" ]; then
-                echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
-                exit 5
-            fi
-        
-            cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
-            cp -r SillyTavern/public/chats/. SillyTavern_new/public/chats/       
-            cp -r SillyTavern/public/worlds/. SillyTavern_new/public/worlds/
-            cp -r SillyTavern/public/groups/. SillyTavern_new/public/groups/
-            cp -r SillyTavern/public/group\ chats/. SillyTavern_new/public/group\ chats/
-            cp -r SillyTavern/public/OpenAI\ Settings/. SillyTavern_new/public/OpenAI\ Settings/
-            cp -r SillyTavern/public/User\ Avatars/. SillyTavern_new/public/User\ Avatars/
-            cp -r SillyTavern/public/backgrounds/. SillyTavern_new/public/backgrounds/
-            mv SillyTavern SillyTavern_old                                    
-            mv SillyTavern_new SillyTavern
+					if [ ! -d "SillyTavern_new" ]; then
+						echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
+						exit 5
+					fi
+				
+					cp -r SillyTavern/public/characters/. SillyTavern_new/public/characters/
+					cp -r SillyTavern/public/chats/. SillyTavern_new/public/chats/       
+					cp -r SillyTavern/public/worlds/. SillyTavern_new/public/worlds/
+					cp -r SillyTavern/public/groups/. SillyTavern_new/public/groups/
+					cp -r SillyTavern/public/group\ chats/. SillyTavern_new/public/group\ chats/
+					cp -r SillyTavern/public/OpenAI\ Settings/. SillyTavern_new/public/OpenAI\ Settings/
+					cp -r SillyTavern/public/User\ Avatars/. SillyTavern_new/public/User\ Avatars/
+					cp -r SillyTavern/public/backgrounds/. SillyTavern_new/public/backgrounds/
+					mv SillyTavern SillyTavern_old                                    
+					mv SillyTavern_new SillyTavern
 
-            read -p "是否删除旧版本,请输入Y/N:" para
-            case $para in
-                [yY])
-                    read -p "若要删除请再次确认" queren
-                    case $queren in
-                        [yY])
-                            rm -rf SillyTavern_old
-                            echo "hoping:酒馆更新成功了喵~"
-                            ;;
-                        [nN])
-                            echo "保留旧版本"
-                            echo "hoping:酒馆更新结束了喵~"
-                            ;;
-                        *)
-                            echo "错误的输入"
-                            read -p "已经默认保留旧版本"
-                            echo "hoping:酒馆更新结束了喵~"
-                            ;;
-                    esac
-            esac
+					read -p "是否删除旧版本,请输入Y/N:" para
+					case $para in
+						[yY])
+							read -p "若要删除请再次确认" queren
+							case $queren in
+								[yY])
+									rm -rf SillyTavern_old
+									echo "hoping:酒馆更新成功了喵~"
+									;;
+								[nN])
+									echo "保留旧版本"
+									echo "hoping:酒馆更新结束了喵~"
+									;;
+								*)
+									echo "错误的输入"
+									read -p "已经默认保留旧版本"
+									echo "hoping:酒馆更新结束了喵~"
+									;;
+							esac
+							;;
+						*)
+							echo "保留旧版本"
+							;;
+					esac
+					;;
+			esac
             ;;
         3)
             #导入破限
