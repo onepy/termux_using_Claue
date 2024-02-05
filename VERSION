@@ -1,1 +1,1 @@
-Ver2.7.6\n更新日志：\n1. 自动添加root软链接，可直接在mt管理器修改文件\n2. clewd配置新增修改PreventImperson\n3. 防止部分喵喵更新clewd时忘记备份cookies，改为保留config.js更新\n4. 新增git pull简单更新酒馆和clewd\n喵喵提示：目前clewd版本需要更新到4.8才能使用
+Ver2.7.6\n更新日志：\n1. 自动添加root软链接，可直接在mt管理器修改文件\n2. clewd配置新增修改PreventImperson\n3. 防止部分喵喵更新clewd时忘记备份cookies，改为保留config.js更新\n4. 部分喵喵使用git pull更新酒馆出现数据丢失\n！！！\n建议使用git pull更新前做好数据保存\n！！！\n喵喵提示：目前clewd版本需要更新到4.8才能使用
