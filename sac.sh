@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.8.0"
+version="Ver2.8.1"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
@@ -247,29 +247,12 @@ function clewdSettings {
 
 function sillyTavernSettings {
     # 4. SillyTavern设置
-	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 保留数据更新酒馆最新版本\n\033[0m\033[0;33m选项3 导入最新整合预设\n\033[0m\033[0;37m选项4 导入DC总结插件by(Darker than Black)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 导入最新整合预设\n\033[0m\033[0;33m选项3 导入DC总结插件by(Darker than Black)\n\033[0m\033[0;37m选项0 更新酒馆\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
-        1)
-	if [ ! -f "SillyTavern/config.yaml" ]; then
-            echo -e "当前酒馆版本过低，请更新酒馆版本后重试"
-            exit
-        fi
-            read -p "是否要修改开放端口?(y/n)" choice
-
-            if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
-                # 读取用户输入的端口号
-                read -p "请输入开放的端口号:" custom_port
-                # 更新配置文件的端口号
-                sed -i 's/port: [0-9]*/port: '$custom_port'/g' SillyTavern/config.yaml
-                echo "端口已修改为$custom_port"
-            else
-                echo "未修改端口号"
-            fi
-            ;;
-        2)
-			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
+        0)
+			echo -e "hoping：选择更新模式(重要数据会进行转移，但喵喵最好自己有备份)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
             read -n 1 -p "" stup_choice
 			echo
 			cd /root
@@ -329,7 +312,24 @@ function sillyTavernSettings {
 					;;
 			esac
             ;;
-        3)
+		1)
+			if [ ! -f "SillyTavern/config.yaml" ]; then
+				echo -e "当前酒馆版本过低，请更新酒馆版本后重试"
+				exit
+			fi
+            read -p "是否要修改开放端口?(y/n)" choice
+
+            if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
+                # 读取用户输入的端口号
+                read -p "请输入开放的端口号:" custom_port
+                # 更新配置文件的端口号
+                sed -i 's/port: [0-9]*/port: '$custom_port'/g' SillyTavern/config.yaml
+                echo "端口已修改为$custom_port"
+            else
+                echo "未修改端口号"
+            fi
+            ;;
+        2)
             #导入破限
             echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
             read -p "回车进行导入破限喵~"
@@ -342,7 +342,7 @@ function sillyTavernSettings {
             cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
             echo -e "\033[0;33m破限已成功导入，启动酒馆看看喵~\033[0m"
             ;;
-        4)
+        3)
             #DC总结插件by(Darker than Black)
             echo -e "\033[0;33m插件作者为Darker than Black,发布于DC类脑频道\n具体地址为:\n\033[0m"
             echo "https://discord.com/channels/1134557553011998840/1190219779458486292"
