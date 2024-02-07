@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.8.2"
+version="Ver2.8.3"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
