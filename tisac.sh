@@ -19,10 +19,10 @@ yes | apt update
 yes | apt upgrade
 
 # 安装proot-distro
-pkg install proot-distro -y
+DEBIAN_FRONTEND=noninteractive pkg install proot-distro -y
 
 # 创建并安装Ubuntu
-proot-distro install ubuntu
+DEBIAN_FRONTEND=noninteractive proot-distro install ubuntu
 
 # Check Ubuntu installed successfully
  if [ ! -d "$current" ]; then
@@ -34,7 +34,7 @@ proot-distro install ubuntu
 
 echo "正在安装相应软件喵~"
 
-pkg install git vim curl xz-utils -y
+DEBIAN_FRONTEND=noninteractive pkg install git vim curl xz-utils -y
 
 if [ -d "SillyTavern" ]; then
   cp -r SillyTavern $current/root/

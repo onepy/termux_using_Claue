@@ -281,7 +281,7 @@ function sillyTavernSettings {
 					cp -r SillyTavern/public/OpenAI\ Settings/. SillyTavern_new/public/OpenAI\ Settings/
 					cp -r SillyTavern/public/User\ Avatars/. SillyTavern_new/public/User\ Avatars/
 					cp -r SillyTavern/public/backgrounds/. SillyTavern_new/public/backgrounds/
-					cp -r SillyTavern/public/setting.js SillyTavern_new/public/
+					cp -r SillyTavern/public/setting.json SillyTavern_new/public/setting.json
 					mv SillyTavern SillyTavern_old                                    
 					mv SillyTavern_new SillyTavern
 
