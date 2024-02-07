@@ -1,10 +1,15 @@
 #!/bin/bash
 
-version="Ver2.7.6"
+version="Ver2.8.0"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
 #
+
+# ANSI Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
 # 检查是否存在git指令
 if command -v git &> /dev/null; then
@@ -85,7 +90,7 @@ fi
 function clewdSettings { 
     # 3. Clewd设置
     clewd_dir=clewd
-    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 保留config.js下载test分支最新修改版clewd\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 更新 clewd(test分支)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -209,10 +214,10 @@ function clewdSettings {
             fi
             ;;
         0)
-		echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
-            	read -n 1 -p "" clewdup_choice
+			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
+            read -n 1 -p "" clewdup_choice
 			echo
-   			cd /root
+			cd /root
 			case $clewdup_choice in
 				1)
 					cd /root/clewd
@@ -267,7 +272,7 @@ function sillyTavernSettings {
 			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
             read -n 1 -p "" stup_choice
 			echo
-   			cd /root
+			cd /root
 			case $stup_choice in
 				1)
 					cd /root/SillyTavern
@@ -293,6 +298,7 @@ function sillyTavernSettings {
 					cp -r SillyTavern/public/OpenAI\ Settings/. SillyTavern_new/public/OpenAI\ Settings/
 					cp -r SillyTavern/public/User\ Avatars/. SillyTavern_new/public/User\ Avatars/
 					cp -r SillyTavern/public/backgrounds/. SillyTavern_new/public/backgrounds/
+					cp -r SillyTavern/public/setting.js SillyTavern_new/public/setting.js
 					mv SillyTavern SillyTavern_old                                    
 					mv SillyTavern_new SillyTavern
 
@@ -358,6 +364,162 @@ function sillyTavernSettings {
     esac
 }
 
+function TavernAI-extrasinstall {
+
+	echo -e "安装TavernAI-extras（酒馆拓展）分为三步骤\n分别大致所需\n三分钟\n\033[0;33m七分钟\n\033[0m\033[0;31m十五分钟\n\033[0m具体时间视情况而定\n\033[0;31m全部安装大致所需\033[0;33m 3 \033[0m\033[0;31mG存储(不包括额外模型)\033[0m"
+	echo -e "当出现\n\033[0;32m恭喜TavernAI-extras（酒馆拓展）所需环境已完全安装，可进行启动喵~\033[0m\n则说明安装完毕喵~"
+	read -p "是否现在进行安装TavernAI-extras（酒馆拓展）[y/n]？" extrasinstallchoice
+	[ "$extrasinstallchoice" = "y" ] || [ "$extrasinstallchoice" = "Y" ] && echo "已开始安装喵~" || exit 7
+	#检测环境
+	if [ ! -d "/root/TavernAI-extras" ]; then
+		echo "hoping:未检测到TavernAI-extras（酒馆拓展），正在通过git下载"
+		git clone https://github.com/Cohee1207/TavernAI-extras /root/TavernAI-extras
+		[ -d /root/TavernAI-extras ] || { echo "TavernAI-extras（酒馆拓展）安装失败，请更换网络后重试喵~"; exit 8; }
+	fi
+	
+	if [ ! -d "/root/myenv" ] || [ ! -f "/root/myenv/bin/activate" ]; then
+		rm -rf /root/myenv
+		# 更新软件包列表并安装所需软件包，重定向输出。
+		echo "正在更新软件包列表..."
+		apt update -y > /dev/null 2>&1
+
+		echo -e "\033[0;33m正在安装python3虚拟环境，请稍候\n\033[0;33m(hoping：首次安装大概需要7到15分钟喵~)..."
+		read -p "是否现在进行安装喵？[y/n]" python3venvchoicce
+		[ "$python3venvchoicce" = "y" ] || [ "$python3venvchoicce" = "Y" ] && DEBIAN_FRONTEND=noninteractive apt install python3 python3-pip python3-venv -y || exit 9
+		echo "python3虚拟环境安装完成。正在创建虚拟环境"
+		python3 -m venv /root/myenv
+		echo "虚拟环境完成，路径为/root/myenv"
+	fi
+	echo -e "\033[0;31m正在安装requirements.txt所需依赖\n\033[0m(hoping：首次安装大概需要15至30分钟，最后构建时会出现长时间页面无变化，请耐心等待喵~)..."
+	read -p "是否现在进行安装喵？[y/n]" requirementschoice
+	[ "$requirementschoice" = "y" ] || [ "$requirementschoice" = "Y" ] && { source /root/myenv/bin/activate; cd /root/TavernAI-extras; pip3 install -r requirements.txt; } || exit 10
+	echo -e "喵喵？\n\033[0;32m恭喜TavernAI-extras（酒馆拓展）所需环境已完全安装，可进行启动喵~\033[0m"
+	
+}
+
+function TavernAI-extrasstart {
+
+	if [ ! -d "/root/TavernAI-extras" ] || [ ! -d "/root/myenv" ] || [ ! -f "/root/myenv/bin/activate" ]; then
+	echo "检测到当前环境不完整，先进行TavernAI-extras（酒馆拓展）安装喵~"
+	exit 11
+	fi
+	echo -e "\033[0;33m喵喵小提示：\n\033[0m启动对应拓展时可能需要额外下载，具体情况可以查看官方文档喵~"
+	sleep 3
+	
+	#进入虚拟环境
+	source /root/myenv/bin/activate
+	cd /root/TavernAI-extras
+	#确认依赖已安装
+	echo -e "正在检测依赖安装情况喵~"
+	pip3 install -r requirements.txt
+	clear
+	
+	# 选项数组
+	modules=("caption" "chromadb" "classify" "coqui-tts" "edge-tts" "embeddings" "rvc" "sd" "silero-tts" "summarize" "talkinghead" "websearch" "确认" "退出")
+
+	# 数组中选项的状态，0 - 未选择，1 - 已选定
+	declare -A selection_status
+
+	# 初始化选项状态
+	for i in "${!modules[@]}"; do
+	  selection_status[$i]=0
+	  selection_status[4]=1
+	done
+
+	# 函数：打印已选中的选项
+	print_selected() {
+	  selected_modules=()
+	  for i in "${!selection_status[@]}"; do
+		if [[ "${selection_status[$i]}" -eq 1 ]]; then
+		  selected_modules+=("${modules[$i]}")
+		fi
+	  done
+	  echo -e "\033[0;33m--------------------------------\033[0m"
+	  echo -e "\033[0;33m使用上↑，下↓进行控制\n\033[0m回车选中，再次选中可取消选定\n\033[0;33m选择完毕后选择确认即可喵~\033[0m"
+	  echo "喵喵当前选择了: $(IFS=,; echo -e "\033[0;36m${selected_modules[*]}\033[0m")"
+	}
+
+	# 函数：显示菜单
+	show_menu() {
+	  print_selected
+	  echo -e "\033[0;33m--------------------------------\033[0m"
+	  for i in "${!modules[@]}"; do
+		if [[ "$i" -eq "$current_selection" ]]; then
+		  # 当前选择中的选项使用绿色显示
+		  echo -e "${GREEN}${modules[$i]} (选择中)${NC}"
+		elif [[ "${selection_status[$i]}" -eq 1 ]]; then
+		  # 被选定的选项使用红色显示
+		  echo -e "${RED}${modules[$i]} (已选定)${NC}"
+		else
+		  # 其他选项正常显示
+		  echo -e "${modules[$i]} (未选择)"
+		fi
+	  done
+	  echo -e "\033[0;33m--------------------------------\033[0m"
+	}
+
+	current_selection=0
+	while true; do
+	  show_menu
+	  # 读取用户输入
+	  IFS= read -rsn1 key
+
+	  case "$key" in
+		$'\x1b')
+		  # 读取转义序列
+		  read -rsn2 -t 0.1 key
+		  case "$key" in
+			'[A') # 上箭头
+			  if [[ $current_selection -eq 0 ]]; then
+				current_selection=$((${#modules[@]} - 1))
+			  else
+				((current_selection--))
+			  fi
+			  ;;
+			'[B') # 下箭头
+			  if [[ $current_selection -eq $((${#modules[@]} - 1)) ]]; then
+				current_selection=0
+			  else
+				((current_selection++))
+			  fi
+			  ;;
+		  esac
+		  ;;
+		"") # Enter键
+		  if [[ $current_selection -eq $((${#modules[@]} - 2)) ]]; then
+			# 选择 "确认" 选项
+			break
+		  elif [[ $current_selection -eq $((${#modules[@]} - 1)) ]]; then
+			# 选择 "退出" 选项
+			exit 12
+		  else
+			# 切换选择状态
+			selection_status[$current_selection]=$((1 - selection_status[$current_selection]))
+		  fi
+		  ;;
+		'q') # 按 'q' 退出
+		  break
+		  ;;
+	  esac
+	  # 清除屏幕以准备下一轮显示
+	  clear
+	done
+
+	# 构建命令行
+	command="python3 server.py"
+	if [ ${#selected_modules[@]} -ne 0 ]; then
+	  command+=" --enable-module=$(IFS=,; echo "${selected_modules[*]}")"
+	fi
+
+	# 打印最终的命令行
+	clear
+	echo "正在启动相关酒馆拓展喵~:"
+	echo "$command"
+	eval $command
+	
+	
+	
+}
 # 主菜单
 echo -e "                                              
 喵喵一键脚本
@@ -370,7 +532,7 @@ echo -e "
 此程序完全免费，不允许如浅睡一天一夜等人对脚本/教程进行盗用/商用。运行时需要稳定的魔法网络环境。"
 while :
 do 
-    echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动Clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 Clewd设置\n\033[0m\033[0;37m选项4 酒馆配置\n\033[0m\033[0;31m选项5 更新脚本\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
+    echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动Clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 Clewd设置\n\033[0m\033[0;37m选项4 酒馆设置\n\033[0m\033[0;33m选项5 安装TavernAI-extras（酒馆拓展）\n\033[0m\033[0;37m选项6 启动TavernAI-extras（酒馆拓展）\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项7 更新脚本\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
     read -n 1 option
     echo 
     case $option in 
@@ -380,6 +542,7 @@ do
             #启动Clewd
             port=$(grep -oP '"Port":\s*\K\d+' clewd/config.js)
             echo "端口为$port, 出现 (x)Login in {邮箱} 代表启动成功, 后续出现AI无法应答等报错请检查本窗口喵。"
+			ps -ef | grep clewd.js | awk '{print$2}' | xargs kill -9
             cd clewd
             bash start.sh
             echo "Clewd已关闭, 即将返回主菜单"
@@ -387,6 +550,7 @@ do
             ;; 
         2) 
             #启动SillyTavern
+			ps -ef | grep server.js | awk '{print$2}' | xargs kill -9
             cd SillyTavern
 	        bash start.sh
             echo "酒馆已关闭, 即将返回主菜单"
@@ -400,7 +564,15 @@ do
             #SillyTavern设置
             sillyTavernSettings
             ;; 
-        5)
+		5)
+			#安装TavernAI-extras（酒馆拓展）及其环境
+			TavernAI-extrasinstall
+			;;
+		6)
+			#启动TavernAI-extras（酒馆拓展）
+			TavernAI-extrasstart
+			;;
+        7)
             # 更新脚本
             curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
 	    echo -e "重启终端或者输入bash sac.sh重新进入脚本喵~"
