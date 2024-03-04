@@ -1,1 +1,1 @@
-Ver2.8.4\n更新日志：\n clewd设置中增加了PassParams和padtxt选项
+Ver2.8.5\n更新日志：\n1. clewd设置中增加了PassParams和padtxt选项\n2. 解决了Ver2.8.4中部分时候无法修改padtxt等错误
