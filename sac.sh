@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.8.3"
+version="Ver2.8.4"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
@@ -90,7 +90,7 @@ fi
 function clewdSettings { 
     # 3. Clewd设置
     clewd_dir=clewd
-    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项0 更新 clewd(test分支)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项9 修改 PassParams状态\n\033[0m\033[0;37m选项a 修改 padtxt\n\033[0m\033[0;33m选项0 更新 clewd(test分支)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
     read -n 1 option
     echo
     case $option in 
@@ -212,6 +212,36 @@ function clewdSettings {
             else
                 echo "未进行修改喵~"
             fi
+            ;;
+        9)
+            PassParams_value=$(grep -oP '"PassParams": \K[^,]*' clewd/config.js)
+            echo -e "当前PassParams值为\033[0;33m $PassParams_value \033[0m喵~"
+            read -p "是否进行更改[y/n]" PassParams_choice
+            if [ $PassParams_choice == "Y" ] || [ $PassParams_choice == "y" ]; then
+                if [ $PassParams_value == 'false' ];
+    then
+                    #将false替换为true
+                    sed -i 's/"PassParams": false,/"PassParams": true,/g' $clewd_dir/config.js
+                    echo -e "hoping：'PassParams'已经被修改成\033[0;33m true \033[0m喵~."
+                elif [ $PassParams_value == 'true' ];
+    then
+                    #将true替换为false
+                    sed -i 's/"PassParams": true,/"PassParams": false,/g' $clewd_dir/config.js
+                    echo -e "hoping：'PassParams'值已经被修改成\033[0;33m false \033[0m喵~."
+                else
+                    echo -e "呜呜X﹏X\nhoping喵未能找到'PassParams'."
+                fi
+            else
+                echo "未进行修改喵~"
+            fi
+            ;;
+        a)
+            current_values=$(grep '"padtxt":' clewd/config.js | sed -e 's/.*"padtxt": "\(.*\)".*/\1/')
+            echo -e "当前的padtxt值为: \033[0;33m$current_values\033[0m"
+            echo -e "请输入新的padtxt值喵，格式如：1000,1000,15000"
+            read new_values
+            sed -i "s/\(\"padtxt\": \"\).*\(\"\)/\1$new_values\2/" clewd/config.js
+            echo -e "更新后的padtxt值: \033[0;36m$(grep '"padtxt":' clewd/config.js | sed -e 's/.*"padtxt": "\(.*\)".*/\1/')\033[0m"
             ;;
         0)
 			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
