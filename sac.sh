@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.8.4"
+version="Ver2.8.5"
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
 # hopingmiao=hotmiao
@@ -240,7 +240,7 @@ function clewdSettings {
             echo -e "当前的padtxt值为: \033[0;33m$current_values\033[0m"
             echo -e "请输入新的padtxt值喵，格式如：1000,1000,15000"
             read new_values
-            sed -i "s/\(\"padtxt\": \"\).*\(\"\)/\1$new_values\2/" clewd/config.js
+            sed -i "s/\"padtxt\": \([\"'][^\"']*[\"']\|[0-9]\+\)/\"padtxt\": \"$new_values\"/g" clewd/config.js
             echo -e "更新后的padtxt值: \033[0;36m$(grep '"padtxt":' clewd/config.js | sed -e 's/.*"padtxt": "\(.*\)".*/\1/')\033[0m"
             ;;
         0)
