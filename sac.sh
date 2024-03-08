@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="Ver2.9.0"
+version="Ver2.9.1"
 clewd_version="$(grep '"version"' "clewd/package.json" | awk -F '"' '{print $4}')($(grep "Main = 'clewd修改版 v'" "clewd/lib/clewd-utils.js" | awk -F'[()]' '{print $3}'))"
 st_version=$(grep '"version"' "SillyTavern/package.json" | awk -F '"' '{print $4}')
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
@@ -415,7 +415,7 @@ function clewdSettings {
             if [[ "$cuschoice" == [yY] ]]; then
                 echo "输入自定义的模型名称喵~"
                 read model_name
-                sed -i "/...AI.mdl().slice(1).map((name => ({ id: name }))), {/a\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ id: '$model_name'},{" clewd/clewd.js
+                sed -i "/((name => ({ id: name }))), {/a\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ id: '$model_name'},{" clewd/clewd.js
             else
                 echo "并未添加自定义模型喵~"
             fi
