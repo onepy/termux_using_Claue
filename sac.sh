@@ -1,8 +1,15 @@
 #!/bin/bash
 
-version="Ver2.8.5"
+version="Ver2.9.0"
+clewd_version="$(grep '"version"' "clewd/package.json" | awk -F '"' '{print $4}')($(grep "Main = 'clewd修改版 v'" "clewd/lib/clewd-utils.js" | awk -F'[()]' '{print $3}'))"
+st_version=$(grep '"version"' "SillyTavern/package.json" | awk -F '"' '{print $4}')
 echo "hoping：卡在这里了？...说明有小猫没开魔法喵~"
 latest_version=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/VERSION)
+clewd_latestversion=$(curl -s https://raw.githubusercontent.com/teralomaniac/clewd/test/package.json | grep '"version"' | awk -F '"' '{print $4}')
+clewd_subversion=$(curl -s https://raw.githubusercontent.com/teralomaniac/clewd/test/lib/clewd-utils.js | grep "Main = 'clewd修改版 v'" | awk -F'[()]' '{print $3}')
+clewd_latest="$clewd_latestversion($clewd_subversion)"
+st_latest=$(curl -s https://raw.githubusercontent.com/SillyTavern/SillyTavern/release/package.json | grep '"version"' | awk -F '"' '{print $4}')
+ saclinkemoji=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/secret_saclink | awk -F '|' '{print $3 }')
 # hopingmiao=hotmiao
 #
 
@@ -89,8 +96,32 @@ fi
 
 function clewdSettings { 
     # 3. Clewd设置
+    if grep -q '"sactag"' "clewd/config.js"; then
+        sactag_value=$(grep '"sactag"' "clewd/config.js" | sed -E 's/.*"sactag": *"([^"]+)".*/\1/')
+    else
+        sactag_value="默认"
+    fi
     clewd_dir=clewd
-    echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 查看 config.js 配置文件\n\033[0m\033[0;37m选项2 使用 Vim 编辑 config.js\n\033[0m\033[0;33m选项3 添加 Cookies\n\033[0m\033[0;37m选项4 修改 Clewd 密码\n\033[0m\033[0;33m选项5 修改 Clewd 端口\n\033[0m\033[0;37m选项6 修改 Cookiecounter\n\033[0m\033[0;33m选项7 修改 rProxy\n\033[0m\033[0;37m选项8 修改 PreventImperson状态\n\033[0m\033[0;33m选项9 修改 PassParams状态\n\033[0m\033[0;37m选项a 修改 padtxt\n\033[0m\033[0;33m选项0 更新 clewd(test分支)\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+    echo -e "\033[0;36mhoping：选一个执行喵~\033[0m
+\033[0;33m当前:\033[0m$clewd_version \033[0;33m最新:\033[0m\033[5;36m$clewd_latest\033[0m \033[0;33mconfig.js:\033[5;37m$sactag_value
+\033[0;33m--------------------------------------\033[0m
+\033[0;33m选项1 查看 config.js 配置文件\033[0m
+\033[0;37m选项2 使用 Vim 编辑 config.js\033[0m
+\033[0;33m选项3 添加 Cookies\033[0m
+\033[0;37m选项4 修改 Clewd 密码\033[0m
+\033[0;33m选项5 修改 Clewd 端口\033[0m
+\033[0;37m选项6 修改 Cookiecounter\033[0m
+\033[0;33m选项7 修改 rProxy\033[0m
+\033[0;37m选项8 修改 PreventImperson状态\033[0m
+\033[0;33m选项9 修改 PassParams状态\033[0m
+\033[0;37m选项a 修改 padtxt\033[0m
+\033[0;33m选项b 切换 config.js配置\033[0m
+\033[0;37m选项c 定义 clewd接入模型\033[0m
+\033[0;33m选项d 修改 api_rProxy(第三方接口)\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;31m选项0 更新 clewd(test分支)\033[0m
+\033[0;33m--------------------------------------\033[0m
+"
     read -n 1 option
     echo
     case $option in 
@@ -243,6 +274,169 @@ function clewdSettings {
             sed -i "s/\"padtxt\": \([\"'][^\"']*[\"']\|[0-9]\+\)/\"padtxt\": \"$new_values\"/g" clewd/config.js
             echo -e "更新后的padtxt值: \033[0;36m$(grep '"padtxt":' clewd/config.js | sed -e 's/.*"padtxt": "\(.*\)".*/\1/')\033[0m"
             ;;
+        b)
+            # Check if 'sactag' is already in the Settings
+            cd /root/clewd
+            if grep -q '"sactag"' "config.js"; then
+                sactag_value=$(grep '"sactag"' "config.js" | sed -E 's/.*"sactag": *"([^"]+)".*/\1/')
+            else
+                # Add 'sactag' to the Settings
+                sed -i'' -e '/"Settings": {/,/}/{ /[^,]$/!b; /}/i\        ,"sactag": "默认"' -e '}' "config.js"
+                sactag_value="默认"
+            fi
+            
+            print_selected() {
+            echo -e "\033[0;33m--------------------------------\033[0m"
+            echo -e "\033[0;33m使用上↑，下↓进行控制\n\033[0m回车选择。"
+            echo -e "喵喵当前正在使用: \033[5;36m$sactag_value\033[0m"
+            }
+            
+            configbak=() # 初始化一个空数组
+            for file in config_*.js; do
+                # 提取每个文件名中的 * 部分，需要去掉 'config_' 和 '.js'
+                config_string="${file#config_}"
+                config_string="${config_string%.js}"
+                # 将提取后的字符串添加到数组中
+                configbak+=("$config_string")
+            done
+            # 输出数组内容以验证结果
+            echo "${configbak[@]}"
+            modules=("${configbak[@]}")
+            modules+=(新建 删除 取消)
+            
+            declare -A selection_status
+            for i in "${!modules[@]}"; do
+                selection_status[$i]=0
+            done
+            
+            show_menu() {
+                print_selected
+            	echo -e "\033[0;33m--------------------------------\033[0m"
+            	for i in "${!modules[@]}"; do
+            	    if [[ "$i" -eq "$current_selection" ]]; then
+            		  # 当前选择中的选项使用绿色显示
+            		  echo -e "${GREEN}${modules[$i]}${NC}"
+            		else
+            		  # 其他选项正常显示
+            		  echo -e "${modules[$i]} (未选择)"
+            		fi
+            	done
+            	echo -e "\033[0;33m--------------------------------\033[0m"
+            }
+            
+            clear
+            current_selection=1
+            while true; do
+                show_menu
+            	# 读取用户输入
+            	IFS= read -rsn1 key
+            
+            	case "$key" in
+                    $'\x1b')
+            		# 读取转义序列
+            		read -rsn2 -t 0.1 key
+            		case "$key" in
+            	        '[A') # 上箭头
+            			  if [[ $current_selection -eq 0 ]]; then
+            				current_selection=$((${#modules[@]} - 1))
+            			  else
+            				((current_selection--))
+            			  fi
+            			  ;;
+            			'[B') # 下箭头
+            			  if [[ $current_selection -eq $((${#modules[@]} - 1)) ]]; then
+            				current_selection=0
+            			  else
+            				((current_selection++))
+            			  fi
+            			  ;;
+            		  esac
+            		  ;;
+            		"") # Enter键
+            		  if [[ $current_selection -eq $((${#modules[@]} - 3)) ]]; then
+            			#创建新配置
+                        echo "给新的config.js命名喵~"
+                        while :
+                        do
+                            read newsactag
+                            [ -n "$newsactag" ] && break
+                            echo "命名不能为空，快重新输入🐱喵~"
+                        done
+                        mv config.js "config_$sactag_value.js"
+                        ps -ef | grep clewd.js | awk '{print$2}' | xargs kill -9
+                        bash start.sh
+                        sed -i'' -e "/\"Settings\": {/,/}/{ /[^,]$/!b; /}/i\\        ,\"sactag\": \"$newsactag\"" -e '}' "config.js"
+                        cd /root
+                        clewdSettings
+                        break
+                      elif [[ $current_selection -eq $((${#modules[@]} - 2)) ]]; then
+                        #删除config.js
+                        echo "输入需要删除的配置名称喵~"
+                        echo "当前存在"
+                        echo "${configbak[@]}"
+                        while :
+                        do
+                            read delsactag
+                            configfile=$(ls config_$delsactag.js 2>/dev/null)
+                            [ -n "$configfile" ] && break
+                            echo "没找到对应配置，检查一下名称是不是输错了喵~"
+                        done
+                        rm -rf $configfile
+                        cd /root
+                        break
+            		  elif [[ $current_selection -eq $((${#modules[@]} - 1)) ]]; then
+            			# 选择 "退出" 选项
+            			echo "当前并未选择"
+            			cd /root
+            			break
+            		  else
+            			# 切换config.js
+            			mv config.js "config_$sactag_value.js"
+            			mv "config_${modules[$current_selection]}.js" config.js
+            			echo -e "config文件成功切换为：\033[5;36m$(grep '"sactag"' "config.js" | sed -E 's/.*"sactag": *"([^"]+)".*/\1/')\033[0m"
+            			sleep 2
+            			cd /root
+            			break
+            		  fi
+            		  ;;
+            		'q') # 按 'q' 退出
+            		  cd /root
+            		  break
+            		  ;;
+            	esac
+            	# 清除屏幕以准备下一轮显示
+            	clear
+            done
+            cd ~
+            ;;
+        c)
+            echo "是否添加自定义模型喵[y/n]？"
+            read cuschoice
+            if [[ "$cuschoice" == [yY] ]]; then
+                echo "输入自定义的模型名称喵~"
+                read model_name
+                sed -i "/...AI.mdl().slice(1).map((name => ({ id: name }))), {/a\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ id: '$model_name'},{" clewd/clewd.js
+            else
+                echo "并未添加自定义模型喵~"
+            fi
+            ;;
+        d)
+            # 修改 api_rProxy
+            echo -e "是否修改api_rProxy地址喵~?"[y/n]
+            read  choice
+            case $choice in  
+                [yY])
+                    # 读取用户输入rProxy
+                    read -p "请输入需要设置代理地址喵~:" api_rProxy
+                    # 更新配置文件的rProxy
+                    sed -i 's#"api_rProxy": ".*",#"api_rProxy": "'$api_rProxy'",#g' $clewd_dir/config.js
+                    echo "api_rProxy已修改为$api_rProxy"
+                    ;; 
+                *) 
+                    echo "不修改喵~"
+                    ;; 
+            esac
+            ;;
         0)
 			echo -e "hoping：选择更新模式(两种模式都会保留重要数据)喵~\n\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 使用git pull进行简单更新\n\033[0m\033[0;37m选项2 几乎重新下载进行全面更新\n\033[0m"
             read -n 1 -p "" clewdup_choice
@@ -260,7 +454,7 @@ function clewdSettings {
 						echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因为网络波动下载失败了，更换网络再试喵~\n\033[0m"
 						exit 5
 					fi
-					cp -r clewd/config.js clewd_new/config.js
+					cp -r clewd/config*.js clewd_new/
 					if [ -f "clewd_new/config.js" ]; then
 						echo "config.js配置文件已转移，正在删除旧版clewd"
 						rm -rf /root/clewd
@@ -268,6 +462,7 @@ function clewdSettings {
 					fi
 					;;
 			esac
+			clewd_version="$(grep '"version"' "clewd/package.json" | awk -F '"' '{print $4}')($(grep "Main = 'clewd修改版 v'" "clewd/lib/clewd-utils.js" | awk -F'[()]' '{print $3}'))"
             ;;
         *)
             echo "什么都没有执行喵~"
@@ -277,7 +472,19 @@ function clewdSettings {
 
 function sillyTavernSettings {
     # 4. SillyTavern设置
-	echo -e "\033[0;36mhoping：选一个执行喵~\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;33m选项1 修改酒馆端口\n\033[0m\033[0;37m选项2 导入最新整合预设\n\033[0m\033[0;33m选项3 导入DC总结插件by(Darker than Black)\n\033[0m\033[0;37m选项0 更新酒馆\n\033[0m\033[0;33m--------------------------------------\n\033[0m"
+	echo -e "\033[0;36mhoping：选一个执行喵~\033[0m
+\033[0;33m当前版本:\033[0m$st_version \033[0;33m最新版本:\033[0m\033[5;36m$st_latest\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;33m选项1 安装TavernAI-extras（酒馆拓展）\033[0m
+\033[0;37m选项2 启动TavernAI-extras（酒馆拓展）\033[0m
+\033[0;33m选项3 修改酒馆端口\033[0m
+\033[0;37m选项4 导入最新整合预设\033[0m
+\033[0;33m选项5 自定义模型名称\033[0m
+\033[0;37m选项6 自定义unlock上下文长度\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;31m选项0 更新酒馆\033[0m
+\033[0;33m--------------------------------------\033[0m
+"
     read -n 1 option
     echo
     case $option in 
@@ -341,8 +548,17 @@ function sillyTavernSettings {
 					esac
 					;;
 			esac
+			st_version=$(grep '"version"' "SillyTavern/package.json" | awk -F '"' '{print $4}')
             ;;
-		1)
+        1)
+            #安装TavernAI-extras（酒馆拓展）及其环境
+			TavernAI-extrasinstall
+            ;;
+        2)
+            #启动TavernAI-extras（酒馆拓展）
+			TavernAI-extrasstart
+            ;;
+		3)
 			if [ ! -f "SillyTavern/config.yaml" ]; then
 				echo -e "当前酒馆版本过低，请更新酒馆版本后重试"
 				exit
@@ -359,34 +575,53 @@ function sillyTavernSettings {
                 echo "未修改端口号"
             fi
             ;;
-        2)
+        4)
             #导入破限
-            echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
-            read -p "回车进行导入破限喵~"
-            rm -rf /root/st_promot
-            git clone https://github.com/hopingmiao/promot.git /root/st_promot
-            if  [ ! -d "/root/st_promot" ]; then
-            echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
-            exit 6
-            fi
-            cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
-            echo -e "\033[0;33m破限已成功导入，启动酒馆看看喵~\033[0m"
-            ;;
-        3)
-            #DC总结插件by(Darker than Black)
-            echo -e "\033[0;33m插件作者为Darker than Black,发布于DC类脑频道\n具体地址为:\n\033[0m"
-            echo "https://discord.com/channels/1134557553011998840/1190219779458486292"
-            read -p "回车进行导入插件喵~"
-            cd /root/SillyTavern/public/QuickReplies
-            curl -O https://cdn.discordapp.com/attachments/1190219779458486292/1190219779856932864/f96ce3edc4220761.json?ex=65bcb10c&is=65aa3c0c&hm=15ede2b950edc8038397bed82ef5d99644226442fc55c904be0f3b47c4fad6bb&
-            echo -e "\033[0;33m等待\n等待\n等待下载结束后回车检测插件是否下载成功喵~\033[0m"
-            read -p " "
-            if [ -f "f96ce3edc4220761.json" ]; then
-                echo -e "\033[0;33m总结插件(by Darker than Black)导入成功\n\033[0m"
+            echo -e "$(curl -s https://raw.githubusercontent.com/hopingmiao/promot/main/STpromotINFO)"
+            echo "是否导入当前预设喵？[y/n]"
+            read choice
+            if [[ "$choice" == [yY] ]]; then
+                echo -e "\033[0;33m本操作仅为破限下载提供方便，所有破限皆为收录，喵喵不具有破限所有权\033[0m"
+                sleep 2
+                rm -rf /root/st_promot
+                git clone https://github.com/hopingmiao/promot.git /root/st_promot
+                if  [ ! -d "/root/st_promot" ]; then
+                    echo -e "(*꒦ິ⌓꒦ີ)\n\033[0;33m hoping：因网络波动文件下载失败了，更换网络后再试喵~\n\033[0m"
+                exit 6
+                fi
+                cp -r /root/st_promot/. /root/SillyTavern/public/'OpenAI Settings'/
+                echo -e "\033[0;33m破限已成功导入，启动酒馆看看喵~\033[0m"
             else
-                echo -e "\033[0;31m总结插件(by Darker than Black)导入失败！\n\033[0m"
+                echo "当前预设未导入喵~"
             fi
-            cd /root
+            ;;
+        5)
+            echo -e "\033[5;33m当前存在自定义模型有：\033[0m"
+            echo -e "$(sed -n '/<optgroup label="自定义">/,/<optgroup label="GPT-3.5 Turbo">/{s/.*<option value="\([^"]*\)".*/\1/p}' SillyTavern/public/index.html)"
+            echo "是否添加自定义模型喵[y/n]？"
+            read cuschoice
+            if [[ "$cuschoice" == [yY] ]]; then
+                echo "输入自定义的模型名称喵~"
+                read CUSTOM_INPUT_VALUE
+                grep -q '<optgroup label="自定义">' "SillyTavern/public/index.html" && sed -i "/<optgroup label=\"自定义\">/a\ \ \ \ <option value=\"$CUSTOM_INPUT_VALUE\">$CUSTOM_INPUT_VALUE</option>" "SillyTavern/public/index.html" || sed -i "/<optgroup label=\"GPT-3.5 Turbo\">/i\<optgroup label=\"自定义\">\n\ \ \ \ <option value=\"$CUSTOM_INPUT_VALUE\">$CUSTOM_INPUT_VALUE</option>\n</optgroup>" "SillyTavern/public/index.html"
+                echo -e "\033[0;33m已添加$CUSTOM_INPUT_VALUE模型喵~\033[0m"
+            else
+                echo "并未添加喵~"
+            fi
+            sleep 2
+            ;;
+        6)
+            unlocked_max=$(sed -n 's/^const unlocked_max = \(.*\);$/\1/p' SillyTavern/public/scripts/openai.js)
+            echo "当前unlocked_max(最大上下文)为$unlocked_max喵~"
+            echo "是否修改最大上下文喵？[y/n]"
+            read unlockedchoice
+            if [[ "$unlockedchoice" == [yY] ]]; then
+                echo "输入unlocked_max值，例如200000"
+                read unlocked_max
+                sed -i "s/^const unlocked_max = .*;/const unlocked_max = ${unlocked_max};/" "SillyTavern/public/scripts/openai.js"
+            else
+                echo "并未修改喵~"
+            fi
             ;;
         *)
             echo "什么都没有执行喵~"
@@ -554,15 +789,27 @@ function TavernAI-extrasstart {
 echo -e "                                              
 喵喵一键脚本
 作者：hoping喵(懒喵~)，水秋喵(苦等hoping喵起床)
-版本：$version
-最新：\033[0;33m$latest_version\033[0m
+版本：$st_version $clewd_version $version
+最新：\033[5;36m$st_latest\033[0m \033[5;32m$clewd_latest\033[0m \033[0;33m$latest_version\033[0m
 来自：Claude2.1先行破限组
 群号：704819371，910524479，304690608
 类脑Discord(角色卡发布等): https://discord.gg/HWNkueX34q
 此程序完全免费，不允许如浅睡纪元等人对脚本/教程进行盗用/商用。运行时需要稳定的魔法网络环境。"
 while :
 do 
-    echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项0 退出脚本\n\033[0m\033[0;33m选项1 启动Clewd\n\033[0m\033[0;37m选项2 启动酒馆\n\033[0m\033[0;33m选项3 Clewd设置\n\033[0m\033[0;37m选项4 酒馆设置\n\033[0m\033[0;33m选项5 安装TavernAI-extras（酒馆拓展）\n\033[0m\033[0;37m选项6 启动TavernAI-extras（酒馆拓展）\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;31m选项7 更新脚本\n\033[0m\033[0;33m--------------------------------------\n\033[0m\033[0;35m不准选其他选项，听到了吗？\n\033[0m\n(⇀‸↼‶)"
+    echo -e "\033[0;36mhoping喵~让你选一个执行（输入数字即可），懂了吗？\033[0;38m(｡ì _ í｡)\033[0m\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;31m选项0 退出脚本\033[0m
+\033[0;33m选项1 启动Clewd\033[0m
+\033[0;37m选项2 启动酒馆\033[0m
+\033[0;33m选项3 Clewd设置\033[0m
+\033[0;37m选项4 酒馆设置\033[0m
+\033[0;33m选项5 神秘小链接$saclinkemoji\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;31m选项6 更新脚本\033[0m
+\033[0;33m--------------------------------------\033[0m
+\033[0;35m不准选其他选项，听到了吗？
+\033[0m\n(⇀‸↼‶)"
     read -n 1 option
     echo 
     case $option in 
@@ -595,14 +842,13 @@ do
             sillyTavernSettings
             ;; 
 		5)
-			#安装TavernAI-extras（酒馆拓展）及其环境
-			TavernAI-extrasinstall
+			saclinkname=$(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/secret_saclink | awk -F '|' '{print $1 }')
+			echo -e "神秘小链接会不定期悄悄更新，这次的神秘小链接是..."
+			sleep 2
+			echo $saclinkname
+			termux-open-url $(curl -s https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/secret_saclink | awk -F '|' '{print $2 }')
 			;;
-		6)
-			#启动TavernAI-extras（酒馆拓展）
-			TavernAI-extrasstart
-			;;
-        7)
+        6)
             # 更新脚本
             curl -O https://raw.githubusercontent.com/hopingmiao/termux_using_Claue/main/sac.sh
 	    echo -e "重启终端或者输入bash sac.sh重新进入脚本喵~"
