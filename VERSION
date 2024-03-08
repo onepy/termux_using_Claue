@@ -3,4 +3,5 @@ Ver2.9.0
 1. clewd选项新增config.js切换（便于切换pro，普通cookies，api）
 2. 酒馆和clewd新增自定义模型
 3. 对使用界面进行优化，可查看酒馆和clewd最新版本
+4. 酒馆预设部分新增Claude3对应预设
 \033[0m
